@@ -18,20 +18,20 @@ export function Hero() {
         </h1>
         <p className="text-lg text-slate-500 mb-8 leading-relaxed max-w-lg mx-auto">
           SAAT（Student Academic Aptitude Type）学业倾向测评。
-          20道题，3分钟，发现你的专属4字母学格代号，获取个性化的分科/专业推荐。
+          60道题，5分钟，发现你的专属4字母学格代号，获取个性化的分科/专业推荐。
         </p>
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <Link href="/test?stage=middle">
-            <Button size="lg">🎓 我是初中生 · 测分科方向</Button>
+            <Button size="lg">🎓 我是准高中生 · 测选科方向</Button>
           </Link>
           <Link href="/test?stage=high">
             <Button size="lg" variant="outline">
-              🏛 我是高中生 · 测专业方向
+              🏛 我是准大学生 · 测专业方向
             </Button>
           </Link>
         </div>
         <p className="mt-4 text-xs text-slate-400">
-          已有 10,000+ 学生完成测评 · 完全免费 · 用时3分钟
+          已有 10,000+ 学生完成测评 · 完全免费 · 用时5分钟
         </p>
       </div>
     </section>

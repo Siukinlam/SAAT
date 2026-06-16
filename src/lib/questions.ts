@@ -1,317 +1,78 @@
 // ============================================================
-// SAAT 测评题库 — 20题
-// 每题测试主要维度，附带影响其他维度
-// effects: [d1, d2, d3, d4], 范围 -1~1
+// SAAT 测评题库 — 60题 · Likert 5级量表
+// 心理学陈述风格（参考 MBTI / Big Five）
+// 每维度15题，左右端交替
 // ============================================================
 
 import type { Question } from './types';
 
 export const QUESTIONS: Question[] = [
-  // ===== 维度1: 学习节奏 (S/D) — 题1-5 =====
-  {
-    id: 1,
-    text: '老师布置了一篇两周后交的论文，你更可能怎么做？',
-    primaryDimension: 1,
-    options: [
-      {
-        text: '列出计划，每天写一点，提前完成',
-        effects: [-1, 0, 0, 0], // → S 稳步
-      },
-      {
-        text: '前面积累素材，最后三天集中爆发完成',
-        effects: [1, 0, 0.3, 0], // → D 灵动 + 微实践
-      },
-    ],
-  },
-  {
-    id: 2,
-    text: '复习备考时，你更喜欢哪种方式？',
-    primaryDimension: 1,
-    options: [
-      {
-        text: '按章节顺序，系统性地逐一复习',
-        effects: [-1, -0.3, 0, 0], // → S + 微理性
-      },
-      {
-        text: '从最难的或最感兴趣的章节开始，不按顺序',
-        effects: [1, 0, 0, -0.3], // → D + 微内驱
-      },
-    ],
-  },
-  {
-    id: 3,
-    text: '面对一个新的学习任务，你的第一反应是？',
-    primaryDimension: 1,
-    options: [
-      {
-        text: '先了解整体框架，再逐步深入',
-        effects: [-1, -0.2, -0.3, 0], // → S + 微理性 + 微理论
-      },
-      {
-        text: '直接上手试试，边做边学',
-        effects: [1, 0, 0.5, 0], // → D + 实践
-      },
-    ],
-  },
-  {
-    id: 4,
-    text: '如果明天有一场重要考试，今晚你会？',
-    primaryDimension: 1,
-    options: [
-      {
-        text: '按部就班复习重点，保证充足睡眠',
-        effects: [-1, -0.3, 0, 0], // → S
-      },
-      {
-        text: '通宵突击，把所有可能考的都过一遍',
-        effects: [1, 0, 0, 0.3], // → D + 微外驱
-      },
-    ],
-  },
-  {
-    id: 5,
-    text: '你更喜欢哪种学习环境？',
-    primaryDimension: 1,
-    options: [
-      {
-        text: '固定的时间、固定的地点，形成规律',
-        effects: [-1, 0, 0, 0],
-      },
-      {
-        text: '随时随地去不同地方学，换换环境更有灵感',
-        effects: [1, 0.3, 0, 0], // → D + 微创造
-      },
-    ],
-  },
 
-  // ===== 维度2: 思维通道 (R/C) — 题6-10 =====
-  {
-    id: 6,
-    text: '解一道数学题时，你更倾向于？',
-    primaryDimension: 2,
-    options: [
-      {
-        text: '严格按照公式和步骤推导',
-        effects: [0, -1, -0.2, 0], // → R + 微理论
-      },
-      {
-        text: '凭直觉猜测答案方向，再验证',
-        effects: [0, 1, 0, 0], // → C
-      },
-    ],
-  },
-  {
-    id: 7,
-    text: '读完一本书后，你更可能？',
-    primaryDimension: 2,
-    options: [
-      {
-        text: '梳理书中的逻辑结构和关键论点',
-        effects: [0, -1, -0.3, 0], // → R + 理论
-      },
-      {
-        text: '被书中的某个画面或情感深深打动',
-        effects: [0, 1, 0, 0], // → C
-      },
-    ],
-  },
-  {
-    id: 8,
-    text: '课堂讨论时，你通常？',
-    primaryDimension: 2,
-    options: [
-      {
-        text: '用事实和数据支撑你的观点',
-        effects: [0, -1, 0, -0.2], // → R
-      },
-      {
-        text: '用比喻和故事来表达你的想法',
-        effects: [0, 1, 0, 0], // → C
-      },
-    ],
-  },
-  {
-    id: 9,
-    text: '看到一道不会的题，你的第一反应是？',
-    primaryDimension: 2,
-    options: [
-      {
-        text: '拆解题干，分析已知条件，逐步推理',
-        effects: [0.2, -1, 0, 0], // → R + 微稳步
-      },
-      {
-        text: '尝试联想以前做过的类似题目，凭感觉试试',
-        effects: [0, 1, 0.3, 0], // → C + 微实践
-      },
-    ],
-  },
-  {
-    id: 10,
-    text: '你更欣赏哪种老师？',
-    primaryDimension: 2,
-    options: [
-      {
-        text: '逻辑清晰、条理分明、推导严谨的老师',
-        effects: [0, -1, -0.2, 0],
-      },
-      {
-        text: '激情澎湃、善于用故事和例子启发学生的老师',
-        effects: [0, 1, 0, 0.2],
-      },
-    ],
-  },
+  // ===== 维度1: 学习节奏 (S-稳步 / D-灵动) — 15题 =====
+  { id: 1, dimension: 1, direction: 'left', statement: '我喜欢提前规划每一天的日程安排。' },
+  { id: 2, dimension: 1, direction: 'right', statement: '计划赶不上变化，我更相信临场发挥。' },
+  { id: 3, dimension: 1, direction: 'left', statement: '一旦开始一件事，我会坚持按部就班地推进。' },
+  { id: 4, dimension: 1, direction: 'right', statement: '我经常同时进行好几件事，在不同任务间跳来跳去。' },
+  { id: 5, dimension: 1, direction: 'left', statement: '稳定的作息和固定的学习环境让我效率最高。' },
+  { id: 6, dimension: 1, direction: 'right', statement: '截止日期临近时的紧迫感反而让我更专注。' },
+  { id: 7, dimension: 1, direction: 'left', statement: '做重要决定前，我需要充分的时间收集信息。' },
+  { id: 8, dimension: 1, direction: 'right', statement: '我经常在最后一刻改变主意，跟着当下的感觉走。' },
+  { id: 9, dimension: 1, direction: 'left', statement: '我喜欢把大目标拆解成小步骤，一步步完成。' },
+  { id: 10, dimension: 1, direction: 'right', statement: '重复做同样的事情会让我感到厌倦。' },
+  { id: 11, dimension: 1, direction: 'left', statement: '我很少迟到，通常都会提前到达。' },
+  { id: 12, dimension: 1, direction: 'right', statement: '我的桌面或房间通常不是特别整洁，但我能找到需要的东西。' },
+  { id: 13, dimension: 1, direction: 'left', statement: '养成一个新习惯后，我会长期坚持下去。' },
+  { id: 14, dimension: 1, direction: 'right', statement: '灵感来了我会立刻放下手头的事去追逐新想法。' },
+  { id: 15, dimension: 1, direction: 'left', statement: '比起多任务并行，我更擅长一次专注做好一件事。' },
 
-  // ===== 维度3: 知识偏好 (T/P) — 题11-15 =====
-  {
-    id: 11,
-    text: '学习一个新概念时，你最关心的是？',
-    primaryDimension: 3,
-    options: [
-      {
-        text: '这个概念背后的原理和推导过程',
-        effects: [0, -0.2, -1, 0], // → T + 微理性
-      },
-      {
-        text: '这个概念在实际中有什么用、怎么用',
-        effects: [0, 0, 1, 0.2], // → P + 微外驱
-      },
-    ],
-  },
-  {
-    id: 12,
-    text: '物理课上做一个实验，你更感兴趣的是？',
-    primaryDimension: 3,
-    options: [
-      {
-        text: '实验验证了什么物理定律、为什么',
-        effects: [0, -0.3, -1, 0], // → T
-      },
-      {
-        text: '亲手操作仪器、观察实验现象本身',
-        effects: [0, 0, 1, 0], // → P
-      },
-    ],
-  },
-  {
-    id: 13,
-    text: '周末有一天自由时间，你会？',
-    primaryDimension: 3,
-    options: [
-      {
-        text: '读一本能引发深度思考的书或看纪录片',
-        effects: [0, 0, -1, -0.3], // → T + 微内驱
-      },
-      {
-        text: '动手做点什么——烘焙、手工、写代码、运动',
-        effects: [0.3, 0, 1, 0], // → P + 微灵动
-      },
-    ],
-  },
-  {
-    id: 14,
-    text: '你对"成绩排名"的看法是？',
-    primaryDimension: 3,
-    options: [
-      {
-        text: '排名只是数字，我更在意自己是否真的理解了',
-        effects: [0, -0.2, -0.3, -1], // → 偏理论 + 内驱
-      },
-      {
-        text: '排名让我知道自己在什么位置，有目标感',
-        effects: [0, 0, 0, 1], // → 外驱(此题主要测d4)
-      },
-    ],
-  },
-  {
-    id: 15,
-    text: '如果让你选一个课外项目，你会选？',
-    primaryDimension: 3,
-    options: [
-      {
-        text: '研究一个你好奇的科学/社会问题并写报告',
-        effects: [0, -0.3, -1, -0.2], // → T
-      },
-      {
-        text: '做一个能实际用起来的作品（App/模型/手作）',
-        effects: [0.2, 0.2, 1, 0], // → P
-      },
-    ],
-  },
+  // ===== 维度2: 思维通道 (R-理性 / C-创造) — 15题 =====
+  { id: 16, dimension: 2, direction: 'left', statement: '面对复杂问题时，我倾向于列出所有可能的逻辑链条。' },
+  { id: 17, dimension: 2, direction: 'right', statement: '我经常依靠直觉做判断，而且通常是对的。' },
+  { id: 18, dimension: 2, direction: 'left', statement: '数据比故事更能说服我。' },
+  { id: 19, dimension: 2, direction: 'right', statement: '一个好的比喻比一组数据更能让我理解问题。' },
+  { id: 20, dimension: 2, direction: 'left', statement: '我注意到别人说话或写作中的逻辑漏洞。' },
+  { id: 21, dimension: 2, direction: 'right', statement: '我经常在脑海中产生画面或场景，而不是文字或数字。' },
+  { id: 22, dimension: 2, direction: 'left', statement: '做选择时，我会列出优缺点清单进行理性分析。' },
+  { id: 23, dimension: 2, direction: 'right', statement: '有时候我自己也说不清为什么会做出某个决定。' },
+  { id: 24, dimension: 2, direction: 'left', statement: '我喜欢玩需要策略和计算能力的游戏。' },
+  { id: 25, dimension: 2, direction: 'right', statement: '我经常会因为一首歌、一幅画或一段文字而情绪波动。' },
+  { id: 26, dimension: 2, direction: 'left', statement: '在争论中，我更关注事实和证据，而非对方的情绪。' },
+  { id: 27, dimension: 2, direction: 'right', statement: '比起条理分明的讲解，故事性的叙述更容易让我记住内容。' },
+  { id: 28, dimension: 2, direction: 'left', statement: '我喜欢把事物分门别类，建立起清晰的思维框架。' },
+  { id: 29, dimension: 2, direction: 'right', statement: '我的想法经常跳跃，别人觉得我跟不上我的思路。' },
+  { id: 30, dimension: 2, direction: 'left', statement: '我习惯用客观的标准来评价事物，而非个人感受。' },
 
-  // ===== 维度4: 动力来源 (I/E) — 题16-20 =====
-  {
-    id: 16,
-    text: '什么最能激励你努力学习？',
-    primaryDimension: 4,
-    options: [
-      {
-        text: '解决难题后的成就感和自我提升',
-        effects: [0, 0, -0.2, -1], // → I
-      },
-      {
-        text: '获得好成绩、奖学金或家长老师的认可',
-        effects: [0, 0, 0, 1], // → E
-      },
-    ],
-  },
-  {
-    id: 17,
-    text: '当你独自完成了一件很厉害的事，你会？',
-    primaryDimension: 4,
-    options: [
-      {
-        text: '自己默默开心，继续下一个目标',
-        effects: [0, 0, 0, -1],
-      },
-      {
-        text: '马上发朋友圈/告诉朋友，分享喜悦',
-        effects: [0, 0.2, 0, 1],
-      },
-    ],
-  },
-  {
-    id: 18,
-    text: '选择未来的专业/方向时，你更看重？',
-    primaryDimension: 4,
-    options: [
-      {
-        text: '是否符合自己的兴趣和天赋',
-        effects: [0, 0.2, -0.3, -1], // → I + 微创造
-      },
-      {
-        text: '就业前景、薪资水平和社会认可度',
-        effects: [0, -0.2, 0.3, 1], // → E + 偏好实践
-      },
-    ],
-  },
-  {
-    id: 19,
-    text: '小组合作时，你的表现更接近？',
-    primaryDimension: 4,
-    options: [
-      {
-        text: '安静做好自己负责的部分，不太需要交流',
-        effects: [0, -0.3, 0, -1],
-      },
-      {
-        text: '积极讨论，希望通过协作达到更好的结果',
-        effects: [0, 0, 0, 1],
-      },
-    ],
-  },
-  {
-    id: 20,
-    text: '你对"竞争"的态度是？',
-    primaryDimension: 4,
-    options: [
-      {
-        text: '竞争是别人的事，我按自己的节奏来',
-        effects: [-0.3, 0, 0, -1], // → I + 微稳步
-      },
-      {
-        text: '竞争让我更有动力，我喜欢赢的感觉',
-        effects: [0.3, 0, 0, 1], // → E + 微灵动
-      },
-    ],
-  },
+  // ===== 维度3: 知识偏好 (T-理论 / P-实践) — 15题 =====
+  { id: 31, dimension: 3, direction: 'left', statement: '我忍不住去想事情背后的原理和为什么。' },
+  { id: 32, dimension: 3, direction: 'right', statement: '知道怎么用就够了，不一定需要知道为什么。' },
+  { id: 33, dimension: 3, direction: 'left', statement: '我喜欢阅读深入探讨某个主题的理论性文章。' },
+  { id: 34, dimension: 3, direction: 'right', statement: '动手做一遍比读十遍书记得牢。' },
+  { id: 35, dimension: 3, direction: 'left', statement: '一个问题弄懂了底层逻辑，我会感到极大的满足。' },
+  { id: 36, dimension: 3, direction: 'right', statement: '我更关注一个知识能帮我解决什么实际问题。' },
+  { id: 37, dimension: 3, direction: 'left', statement: '我对事物的运作机制充满好奇，即使和我无关。' },
+  { id: 38, dimension: 3, direction: 'right', statement: '与其花时间理解理论，我宁愿直接开始做事。' },
+  { id: 39, dimension: 3, direction: 'left', statement: '抽象概念和理论讨论让我感到兴奋。' },
+  { id: 40, dimension: 3, direction: 'right', statement: '我擅长把别人的想法落地成具体可执行的方案。' },
+  { id: 41, dimension: 3, direction: 'left', statement: '我喜欢探索哲学、数学或科学理论中的深层问题。' },
+  { id: 42, dimension: 3, direction: 'right', statement: '我更喜欢能立刻看到成果的学习或工作。' },
+  { id: 43, dimension: 3, direction: 'left', statement: '对我来说，弄清楚一个概念的定义和边界很重要。' },
+  { id: 44, dimension: 3, direction: 'right', statement: '我倾向于通过反复试错来学习，而不是先看说明书。' },
+  { id: 45, dimension: 3, direction: 'left', statement: '花一下午思考一个理论问题，对我来说是享受。' },
+
+  // ===== 维度4: 动力来源 (I-内驱 / E-外驱) — 15题 =====
+  { id: 46, dimension: 4, direction: 'left', statement: '即使没人知道，我也会尽力把事情做好。' },
+  { id: 47, dimension: 4, direction: 'right', statement: '公开的排名或评比能给我极大的动力。' },
+  { id: 48, dimension: 4, direction: 'left', statement: '我学习是因为我真的想学，不是因为考试要考。' },
+  { id: 49, dimension: 4, direction: 'right', statement: '获得他人的赞扬和认可对我来说非常重要。' },
+  { id: 50, dimension: 4, direction: 'left', statement: '完成一个有挑战的任务后，我内心的成就感比任何奖励都重要。' },
+  { id: 51, dimension: 4, direction: 'right', statement: '如果有奖学金或高薪作为回报，我的努力程度会明显提升。' },
+  { id: 52, dimension: 4, direction: 'left', statement: '我不太在意别人怎么评价我的选择。' },
+  { id: 53, dimension: 4, direction: 'right', statement: '看到别人比我强，会激发我更强的竞争欲。' },
+  { id: 54, dimension: 4, direction: 'left', statement: '失败对我的打击主要来自于对自己的失望，而非他人的看法。' },
+  { id: 55, dimension: 4, direction: 'right', statement: '我喜欢在社交媒体上分享自己的成就和进步。' },
+  { id: 56, dimension: 4, direction: 'left', statement: '我选择的方向更多出于个人兴趣，而不是就业前景。' },
+  { id: 57, dimension: 4, direction: 'right', statement: '清晰的奖励机制能让我更有干劲。' },
+  { id: 58, dimension: 4, direction: 'left', statement: '独处思考能给我带来比社交活动更多的能量。' },
+  { id: 59, dimension: 4, direction: 'right', statement: '团队协作中，别人的期待会推动我做得更好。' },
+  { id: 60, dimension: 4, direction: 'left', statement: '即使没有外部压力，我也会给自己设定高标准。' },
 ];

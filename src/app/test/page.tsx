@@ -5,7 +5,7 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import { QuestionCard } from '@/components/test/QuestionCard';
 import { QUESTIONS } from '@/lib/questions';
 import { evaluate } from '@/lib/saat-engine';
-import type { StudentStage } from '@/lib/types';
+import type { StudentStage, LikertValue } from '@/lib/types';
 
 function TestContent() {
   const searchParams = useSearchParams();
@@ -13,17 +13,24 @@ function TestContent() {
   const stage = (searchParams.get('stage') || 'middle') as StudentStage;
 
   const [currentQ, setCurrentQ] = useState(0);
-  const [answers, setAnswers] = useState<('A' | 'B')[]>([]);
+  const [answers, setAnswers] = useState<LikertValue[]>([]);
 
-  const handleAnswer = (answer: 'A' | 'B') => {
-    const newAnswers = [...answers, answer];
+  const handleAnswer = (value: LikertValue) => {
+    const newAnswers = [...answers, value];
 
     if (currentQ < QUESTIONS.length - 1) {
       setAnswers(newAnswers);
       setCurrentQ(currentQ + 1);
     } else {
       const result = evaluate(QUESTIONS, newAnswers);
-      router.push(`/result/${result.code}?stage=${stage}&d1=${result.scores.d1}&d2=${result.scores.d2}&d3=${result.scores.d3}&d4=${result.scores.d4}`);
+      const params = new URLSearchParams({
+        stage,
+        d1: String(result.scores.d1),
+        d2: String(result.scores.d2),
+        d3: String(result.scores.d3),
+        d4: String(result.scores.d4),
+      });
+      router.push(`/result/${result.code}?${params.toString()}`);
     }
   };
 
@@ -34,9 +41,8 @@ function TestContent() {
       <QuestionCard
         questionNumber={currentQ + 1}
         totalQuestions={QUESTIONS.length}
-        question={q.text}
-        optionA={q.options[0].text}
-        optionB={q.options[1].text}
+        statement={q.statement}
+        dimension={q.dimension}
         onAnswer={handleAnswer}
       />
     </main>
