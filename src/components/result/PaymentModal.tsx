@@ -43,15 +43,19 @@ export function PaymentModal({ onUnlock, onClose }: PaymentModalProps) {
 
           {/* 扫码区 */}
           <div className="text-center space-y-3">
-            <p className="text-sm font-medium text-slate-700">微信/支付宝扫码支付</p>
-            <div className="w-48 h-48 mx-auto bg-slate-100 rounded-xl flex items-center justify-center border-2 border-dashed border-slate-300">
-              <div className="text-center text-slate-400">
-                <div className="text-3xl mb-1">📱</div>
-                <p className="text-xs">请替换为<br />你的收款码</p>
+            <p className="text-sm font-medium text-slate-700">微信或支付宝扫码支付 ¥9.9</p>
+            <div className="flex gap-3 justify-center">
+              <div className="text-center">
+                <img src="/wechat-pay.jpeg" alt="微信支付" className="w-36 h-36 object-contain rounded-xl border" />
+                <p className="text-xs text-slate-400 mt-1">微信</p>
+              </div>
+              <div className="text-center">
+                <img src="/alipay.jpeg" alt="支付宝" className="w-36 h-36 object-contain rounded-xl border" />
+                <p className="text-xs text-slate-400 mt-1">支付宝</p>
               </div>
             </div>
             <p className="text-xs text-slate-400">
-              支付完成后，输入下方解锁码
+              支付完成后联系客服获取解锁码
             </p>
           </div>
 
@@ -82,7 +86,7 @@ export function PaymentModal({ onUnlock, onClose }: PaymentModalProps) {
           </Button>
 
           <p className="text-xs text-slate-400 text-center">
-            支付后联系客服获取解锁码，或关注公众号自动获取
+            支付后联系客服获取解锁码，解锁后永久可看
           </p>
         </CardContent>
       </Card>
