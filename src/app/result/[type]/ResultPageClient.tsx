@@ -10,6 +10,7 @@ import { RadarChart } from '@/components/result/RadarChart';
 import { DimensionBars } from '@/components/result/DimensionBars';
 import { RecommendationCard } from '@/components/result/RecommendationCard';
 import { PaymentModal } from '@/components/result/PaymentModal';
+import { FullReport } from '@/components/result/FullReport';
 import { getShareText } from '@/lib/saat-engine';
 import type { SAATType, DimensionScores, StudentStage, SubjectRecommendation, MajorRecommendation, SAATCode } from '@/lib/types';
 
@@ -122,43 +123,13 @@ export function ResultPageClient({ type, scores, stage, subjectRecs, majorRecs }
             </CardContent>
           </Card>
         ) : (
-          <Card>
-            <CardContent className="p-6">
-              <h3 className="font-bold text-lg text-slate-900 mb-4">📋 AI深度分析报告</h3>
-              <div className="prose prose-sm text-slate-600 space-y-3">
-                <p>
-                  基于你的 SAAT 学格 <strong>{type.code}「{type.name}」</strong>，
-                  你的学习风格偏向{type.learningStyle}
-                </p>
-                <h4>专业匹配分析</h4>
-                <p>
-                  在13大学科门类中，你的学格最匹配的是以下方向。建议结合自身兴趣和
-                  就业前景做综合判断。
-                </p>
-                {stage === 'middle' ? (
-                  <p>
-                    对于高中选科，建议优先考虑 {subjectRecs[0]?.category || '传统理科组合'}。
-                    选科不只是选科目，更是选择未来3年的学习方式和竞争赛道。
-                  </p>
-                ) : (
-                  <p>
-                    对于大学专业选择，{majorRecs[0]?.name || '计算机相关专业'} 是你的高匹配方向。
-                    但匹配度高不等于一定要选——兴趣是最好的老师。
-                  </p>
-                )}
-                <h4>个性化学习建议</h4>
-                <ul>
-                  {type.strengths.map((s, i) => (
-                    <li key={i}>发挥你的"{s}"优势，选择能让你沉浸其中的学习方式</li>
-                  ))}
-                  <li>注意：{type.watchOut}</li>
-                </ul>
-                <p className="text-xs text-slate-400 mt-4">
-                  * 以上分析由模板生成。购买深度报告获取AI定制分析。
-                </p>
-              </div>
-            </CardContent>
-          </Card>
+          <FullReport
+            type={type}
+            scores={scores}
+            stage={stage}
+            subjectRecs={subjectRecs}
+            majorRecs={majorRecs}
+          />
         )}
 
         {/* 支付弹窗 */}
