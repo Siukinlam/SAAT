@@ -44,6 +44,13 @@ function TestContent() {
         statement={q.statement}
         dimension={q.dimension}
         onAnswer={handleAnswer}
+        onBack={() => {
+          if (currentQ > 0) {
+            setAnswers(answers.slice(0, -1));
+            setCurrentQ(currentQ - 1);
+          }
+        }}
+        canGoBack={currentQ > 0}
       />
     </main>
   );

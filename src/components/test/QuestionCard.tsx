@@ -11,6 +11,8 @@ interface QuestionCardProps {
   statement: string;
   dimension: number;
   onAnswer: (value: LikertValue) => void;
+  onBack?: () => void;
+  canGoBack?: boolean;
 }
 
 const OPTION_COLORS = [
@@ -27,12 +29,27 @@ export function QuestionCard({
   statement,
   dimension,
   onAnswer,
+  onBack,
+  canGoBack = false,
 }: QuestionCardProps) {
   const progress = (questionNumber / totalQuestions) * 100;
   const dimLabel = DIMENSIONS[dimension - 1];
 
   return (
     <div className="max-w-lg mx-auto px-4">
+      {/* 返回按钮 */}
+      {canGoBack && onBack && (
+        <button
+          onClick={onBack}
+          className="mb-4 text-sm text-slate-400 hover:text-slate-600 transition-colors flex items-center gap-1 cursor-pointer"
+        >
+          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+          </svg>
+          返回上一题
+        </button>
+      )}
+
       {/* 进度条 */}
       <div className="mb-8">
         <div className="flex items-center justify-between mb-2">
