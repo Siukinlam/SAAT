@@ -6,18 +6,26 @@ import { Card, CardContent } from '@/components/ui/Card';
 
 type Tab = 'wechat' | 'alipay';
 
+function getTodayKeyword(): string {
+  const d = new Date();
+  const mm = String(d.getMonth() + 1).padStart(2, '0');
+  const dd = String(d.getDate()).padStart(2, '0');
+  return `XG${mm}${dd}`;
+}
+
 interface PaymentModalProps {
   onUnlock: () => void;
   onClose: () => void;
 }
 
 export function PaymentModal({ onUnlock, onClose }: PaymentModalProps) {
-  const [step, setStep] = useState<'pay' | 'code' | 'unlock'>('pay');
+  const [step, setStep] = useState<'pay' | 'confirm' | 'keyword' | 'unlock'>('pay');
   const [tab, setTab] = useState<Tab>('wechat');
   const [dailyCode, setDailyCode] = useState('');
   const [inputCode, setInputCode] = useState('');
   const [error, setError] = useState('');
   const [verifying, setVerifying] = useState(false);
+  const [confirmChecked, setConfirmChecked] = useState(false);
 
   useEffect(() => {
     fetch('/api/verify-code')
@@ -54,20 +62,15 @@ export function PaymentModal({ onUnlock, onClose }: PaymentModalProps) {
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 overflow-y-auto">
       <Card className="max-w-sm w-full my-8 shadow-2xl border-0">
         <CardContent className="p-0 relative overflow-hidden rounded-2xl">
-
-          {/* 顶部渐变条 */}
           <div className="h-1.5 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500" />
-
-          {/* 关闭按钮 */}
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 z-10 w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-500 hover:text-slate-700 transition-colors cursor-pointer"
+            className="absolute top-4 right-4 z-10 w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-500 cursor-pointer"
           >
             ✕
           </button>
 
           <div className="p-6 space-y-5">
-            {/* 标题 */}
             <div className="text-center pt-2">
               <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-indigo-50 rounded-full text-xs font-medium text-indigo-600 mb-3">
                 <span className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse" />
@@ -81,9 +84,10 @@ export function PaymentModal({ onUnlock, onClose }: PaymentModalProps) {
               </div>
             </div>
 
+            {/* ===== Step 1: 扫码支付 ===== */}
             {step === 'pay' && (
               <>
-                {/* 支付方式切换 */}
+                {/* 支付切换 */}
                 <div className="flex bg-slate-100 rounded-xl p-1">
                   {[
                     { key: 'wechat' as Tab, label: '微信支付', icon: '💬' },
@@ -93,9 +97,7 @@ export function PaymentModal({ onUnlock, onClose }: PaymentModalProps) {
                       key={t.key}
                       onClick={() => setTab(t.key)}
                       className={`flex-1 py-2.5 rounded-lg text-sm font-medium transition-all cursor-pointer ${
-                        tab === t.key
-                          ? 'bg-white text-slate-900 shadow-sm'
-                          : 'text-slate-500 hover:text-slate-700'
+                        tab === t.key ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'
                       }`}
                     >
                       {t.icon} {t.label}
@@ -103,28 +105,22 @@ export function PaymentModal({ onUnlock, onClose }: PaymentModalProps) {
                   ))}
                 </div>
 
-                {/* 收款码展示区 */}
+                {/* 收款码 */}
                 <div className="relative">
-                  {/* 外框装饰 */}
                   <div className="absolute inset-0 bg-gradient-to-br from-indigo-100/50 via-purple-100/30 to-pink-100/50 rounded-2xl" />
                   <div className="relative bg-white rounded-2xl p-5 border border-slate-100 shadow-inner">
                     <div className="flex flex-col items-center">
-                      {/* 二维码 */}
                       <div className="relative">
-                        {/* 四角装饰 */}
                         <div className="absolute -top-2 -left-2 w-5 h-5 border-t-2 border-l-2 border-indigo-300 rounded-tl-lg" />
                         <div className="absolute -top-2 -right-2 w-5 h-5 border-t-2 border-r-2 border-indigo-300 rounded-tr-lg" />
                         <div className="absolute -bottom-2 -left-2 w-5 h-5 border-b-2 border-l-2 border-indigo-300 rounded-bl-lg" />
                         <div className="absolute -bottom-2 -right-2 w-5 h-5 border-b-2 border-r-2 border-indigo-300 rounded-br-lg" />
-
                         <img
                           src={tab === 'wechat' ? '/wechat-pay.jpeg' : '/alipay.jpeg'}
                           alt={tab === 'wechat' ? '微信支付' : '支付宝'}
                           className="w-44 h-44 object-contain rounded-lg"
                         />
                       </div>
-
-                      {/* 提示文字 */}
                       <div className="mt-4 flex items-center gap-2 text-xs text-slate-400">
                         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                           <path strokeLinecap="round" strokeLinejoin="round" d="M3 10h2l1-3h2l1 3h2l1-3h2l1 3h2M7 14h10M7 18h10" />
@@ -135,44 +131,102 @@ export function PaymentModal({ onUnlock, onClose }: PaymentModalProps) {
                   </div>
                 </div>
 
-                {/* 支付说明 */}
                 <div className="flex items-start gap-3 p-3 bg-slate-50 rounded-xl">
-                  <div className="flex-shrink-0 w-5 h-5 rounded-full bg-indigo-100 flex items-center justify-center text-xs text-indigo-600 mt-0.5">
-                    1
-                  </div>
-                  <p className="text-xs text-slate-500 leading-relaxed">
-                    扫码支付 ¥9.9 后，点击下方按钮获取今日解锁码
-                  </p>
+                  <div className="flex-shrink-0 w-5 h-5 rounded-full bg-indigo-100 flex items-center justify-center text-xs text-indigo-600 mt-0.5">1</div>
+                  <p className="text-xs text-slate-500 leading-relaxed">扫码支付 ¥9.9，保存支付凭证截图</p>
+                </div>
+                <div className="flex items-start gap-3 p-3 bg-slate-50 rounded-xl">
+                  <div className="flex-shrink-0 w-5 h-5 rounded-full bg-indigo-100 flex items-center justify-center text-xs text-indigo-600 mt-0.5">2</div>
+                  <p className="text-xs text-slate-500 leading-relaxed">支付后点击下方按钮，获取暗号</p>
+                </div>
+                <div className="flex items-start gap-3 p-3 bg-slate-50 rounded-xl">
+                  <div className="flex-shrink-0 w-5 h-5 rounded-full bg-indigo-100 flex items-center justify-center text-xs text-indigo-600 mt-0.5">3</div>
+                  <p className="text-xs text-slate-500 leading-relaxed">关注公众号发送暗号，自动获取解锁码</p>
                 </div>
 
-                <Button onClick={() => setStep('code')} size="lg" className="w-full h-12 text-base">
-                  ✅ 我已支付 ¥9.9，获取解锁码
+                <Button onClick={() => setStep('confirm')} size="lg" className="w-full h-12 text-base">
+                  ✅ 我已支付 ¥9.9，下一步
+                </Button>
+              </>
+            )}
+
+            {/* ===== Step 2: 确认支付 ===== */}
+            {step === 'confirm' && (
+              <>
+                <div className="bg-amber-50 rounded-2xl p-4 border border-amber-200">
+                  <div className="flex items-start gap-3">
+                    <span className="text-xl flex-shrink-0">⚠️</span>
+                    <div className="space-y-2">
+                      <p className="text-sm font-medium text-amber-800">请确认你已真实支付</p>
+                      <p className="text-xs text-amber-600 leading-relaxed">
+                        未支付获取解锁码属于不诚信行为。系统会记录每次解锁，异常访问将被限制。
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <label className="flex items-start gap-3 p-3 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={confirmChecked}
+                    onChange={(e) => setConfirmChecked(e.target.checked)}
+                    className="mt-0.5 w-4 h-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"
+                  />
+                  <span className="text-sm text-slate-600 leading-relaxed">
+                    我已真实支付 ¥9.9，理解虚假操作将被限制使用
+                  </span>
+                </label>
+
+                <Button
+                  onClick={() => setStep('keyword')}
+                  disabled={!confirmChecked}
+                  size="lg"
+                  className="w-full h-12 text-base"
+                >
+                  确认已支付，获取暗号
+                </Button>
+              </>
+            )}
+
+            {/* ===== Step 3: 公众号 + 暗号 ===== */}
+            {step === 'keyword' && (
+              <>
+                <div className="bg-green-50 rounded-2xl p-5 space-y-4 border border-green-200">
+                  <div className="text-center">
+                    <p className="text-sm font-medium text-green-800 mb-3">
+                      📱 微信搜索关注公众号
+                    </p>
+                    <div className="bg-white rounded-xl py-3 px-4 border border-green-200">
+                      <span className="text-lg font-bold text-green-700">小蓝的志愿笔记</span>
+                    </div>
+                  </div>
+
+                  <div className="border-t border-green-200 pt-4 text-center space-y-2">
+                    <p className="text-sm font-medium text-green-800">
+                      关注后发送下方暗号获取解锁码
+                    </p>
+                    <div className="bg-white rounded-xl py-3 px-4 border-2 border-dashed border-green-300">
+                      <span className="text-2xl font-mono font-bold tracking-[0.3em] text-green-700 select-all">
+                        {getTodayKeyword()}
+                      </span>
+                    </div>
+                    <p className="text-xs text-green-500">
+                      暗号每日更新 · 当日有效
+                    </p>
+                  </div>
+                </div>
+
+                <Button onClick={() => setStep('unlock')} size="lg" variant="outline" className="w-full">
+                  已拿到解锁码，去输入 →
                 </Button>
 
                 <p className="text-xs text-slate-400 text-center">
-                  诚信交易 · 解锁后可永久查看报告
+                  如有问题，关注公众号后直接联系客服
                 </p>
               </>
             )}
 
-            {step === 'code' && (
-              <>
-                <div className="bg-gradient-to-br from-white to-indigo-50/50 rounded-2xl p-5 text-center space-y-3 border border-indigo-100">
-                  <p className="text-xs font-medium text-indigo-400 uppercase tracking-wider">今日解锁码</p>
-                  <div className="bg-white rounded-xl py-4 px-4 border-2 border-dashed border-indigo-200">
-                    <span className="text-2xl font-mono font-bold tracking-[0.3em] text-indigo-700 select-all">
-                      {dailyCode || '••••••••••'}
-                    </span>
-                  </div>
-                  <p className="text-xs text-slate-400">当日有效 · 请勿外传</p>
-                </div>
-
-                <Button onClick={() => setStep('unlock')} size="lg" variant="outline" className="w-full">
-                  去输入解锁码 →
-                </Button>
-              </>
-            )}
-
+            {/* ===== Step 4: 输入解锁码 ===== */}
             {step === 'unlock' && (
               <>
                 <div>
@@ -181,7 +235,7 @@ export function PaymentModal({ onUnlock, onClose }: PaymentModalProps) {
                     value={inputCode}
                     onChange={(e) => { setInputCode(e.target.value); setError(''); }}
                     onKeyDown={(e) => e.key === 'Enter' && handleVerify()}
-                    placeholder="输入或粘贴解锁码"
+                    placeholder="输入解锁码"
                     className={`w-full px-4 py-3.5 rounded-xl border-2 text-center text-lg tracking-widest outline-none transition-all ${
                       error
                         ? 'border-red-300 bg-red-50 placeholder-red-300'
@@ -189,9 +243,7 @@ export function PaymentModal({ onUnlock, onClose }: PaymentModalProps) {
                     }`}
                     autoFocus
                   />
-                  {error && (
-                    <p className="text-red-500 text-xs mt-1.5 text-center">{error}</p>
-                  )}
+                  {error && <p className="text-red-500 text-xs mt-1.5 text-center">{error}</p>}
                 </div>
 
                 <Button onClick={handleVerify} disabled={verifying} size="lg" className="w-full h-12 text-base">
@@ -199,10 +251,10 @@ export function PaymentModal({ onUnlock, onClose }: PaymentModalProps) {
                 </Button>
 
                 <button
-                  onClick={() => setStep('code')}
+                  onClick={() => setStep('keyword')}
                   className="w-full text-xs text-slate-400 hover:text-indigo-500 transition-colors cursor-pointer"
                 >
-                  ← 返回查看解锁码
+                  ← 返回查看暗号
                 </button>
               </>
             )}
