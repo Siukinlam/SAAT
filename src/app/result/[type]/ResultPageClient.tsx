@@ -9,6 +9,7 @@ import { TypeBadge } from '@/components/result/TypeBadge';
 import { RadarChart } from '@/components/result/RadarChart';
 import { DimensionBars } from '@/components/result/DimensionBars';
 import { RecommendationCard } from '@/components/result/RecommendationCard';
+import { PaymentModal } from '@/components/result/PaymentModal';
 import { getShareText } from '@/lib/saat-engine';
 import type { SAATType, DimensionScores, StudentStage, SubjectRecommendation, MajorRecommendation, SAATCode } from '@/lib/types';
 
@@ -22,6 +23,7 @@ interface ResultPageClientProps {
 
 export function ResultPageClient({ type, scores, stage, subjectRecs, majorRecs }: ResultPageClientProps) {
   const [showReport, setShowReport] = useState(false);
+  const [showPayment, setShowPayment] = useState(false);
   const shareText = getShareText(type.code, type.name);
 
   const handleShare = async () => {
@@ -113,10 +115,10 @@ export function ResultPageClient({ type, scores, stage, subjectRecs, majorRecs }
                 职业路径预览和个性化学习建议。
               </p>
               <div className="text-2xl font-bold text-indigo-800 mb-4">¥9.9</div>
-              <Button onClick={() => setShowReport(true)} size="lg">
-                解锁深度报告
+              <Button onClick={() => setShowPayment(true)} size="lg">
+                立即解锁
               </Button>
-              <p className="text-xs text-indigo-400 mt-2">一次购买，永久可看</p>
+              <p className="text-xs text-indigo-400 mt-2">扫码支付 · 输入解锁码 · 即刻查看</p>
             </CardContent>
           </Card>
         ) : (
@@ -152,11 +154,19 @@ export function ResultPageClient({ type, scores, stage, subjectRecs, majorRecs }
                   <li>注意：{type.watchOut}</li>
                 </ul>
                 <p className="text-xs text-slate-400 mt-4">
-                  * 以上分析由AI生成，仅供学业规划参考。建议结合老师、家长的意见做最终决策。
+                  * 以上分析由模板生成。购买深度报告获取AI定制分析。
                 </p>
               </div>
             </CardContent>
           </Card>
+        )}
+
+        {/* 支付弹窗 */}
+        {showPayment && (
+          <PaymentModal
+            onUnlock={() => { setShowReport(true); setShowPayment(false); }}
+            onClose={() => setShowPayment(false)}
+          />
         )}
 
         {/* 分享按钮 */}
