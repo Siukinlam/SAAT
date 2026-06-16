@@ -19,11 +19,12 @@ export async function generateMetadata({ params }: ResultPageProps): Promise<Met
   const saatType = SAAT_TYPES[type as SAATCode];
   if (!saatType) return { title: '未知学格' };
 
+  const displayCode = type.replace(/-/g, ' ');
   return {
-    title: `${type} ${saatType.name} — SAAT 学格测评结果`,
-    description: `我是 ${type}「${saatType.name}」— ${saatType.tagline}。来测测你的学格是什么？`,
+    title: `${displayCode} ${saatType.name} — SAAT 学格测评结果`,
+    description: `我是 ${displayCode}「${saatType.name}」— ${saatType.tagline}。来测测你的学格是什么？`,
     openGraph: {
-      title: `我是 ${type}「${saatType.name}」`,
+      title: `我是 ${displayCode}「${saatType.name}」`,
       description: saatType.tagline,
       type: 'website',
       locale: 'zh_CN',

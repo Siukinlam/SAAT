@@ -80,5 +80,6 @@ export function evaluate(
  * 分享文案
  */
 export function getShareText(code: SAATCode, name: string): string {
-  return `我在SAAT学格测评中是 ${code}「${name}」！快来测测你的学格是什么？`;
+  const displayCode = code.replace(/-/g, ' ');
+  return `我在SAAT学格测评中是 ${displayCode}「${name}」！快来测测你的学格是什么？`;
 }

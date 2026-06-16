@@ -22,6 +22,28 @@ export async function POST(request: NextRequest) {
   const orderId = `SAAT-${Date.now()}-${crypto.randomBytes(2).toString('hex')}`;
   pendingOrders.set(orderId, { nickname: nickname.trim(), time: Date.now() });
 
+  // 发送企业微信通知
+  const wecomKey = process.env.WECOM_WEBHOOK_KEY;
+  if (wecomKey) {
+    fetch(`https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=${wecomKey}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        msgtype: 'markdown',
+        markdown: {
+          content: [
+            `## 💰 新的支付订单`,
+            `> 昵称: <font color="info">${nickname.trim()}</font>`,
+            `> 订单号: ${orderId}`,
+            `> 时间: ${new Date().toLocaleString('zh-CN')}`,
+            ``,
+            `[👉 去审批](https://saattype.com/admin)`,
+          ].join('\n'),
+        },
+      }),
+    }).catch(() => {});
+  }
+
   return NextResponse.json({ orderId, status: 'pending' });
 }
 
