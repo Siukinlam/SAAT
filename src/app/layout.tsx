@@ -18,10 +18,10 @@ export const metadata: Metadata = {
   title: "SAAT 学格 — 发现你的学业倾向",
   description:
     "SAAT（Student Academic Aptitude Type）学业倾向测评。60道题，5分钟，发现你的专属学格代号，获取个性化的分科/专业推荐。",
-  keywords: ["学格", "学业测评", "MBTI", "高考志愿", "选科", "专业选择", "SAAT"],
+  keywords: ["学格", "SAAT", "学业测评", "高考志愿", "选科", "专业选择"],
   openGraph: {
     title: "SAAT 学格 — 发现你的学业倾向",
-    description: "20道题，3分钟，发现你的专属学格代号！准高中生和准大学生专属的学业MBTI测评。",
+    description: "20道题，3分钟，发现你的专属学格代号！发现你的学格，找到你的方向。",
     type: "website",
     locale: "zh_CN",
   },
