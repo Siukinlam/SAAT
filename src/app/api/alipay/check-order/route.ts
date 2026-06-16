@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import crypto from 'crypto';
 
 const APP_ID = process.env.ALIPAY_APP_ID || '';
-const PRIVATE_KEY = (process.env.PRIVATE_KEY || '').replace(/\\n/g, '\n');
+const PRIVATE_KEY = (process.env.ALIPAY_PRIVATE_KEY || '').replace(/\\n/g, '\n');
 const ALIPAY_GATEWAY = 'https://openapi.alipay.com/gateway.do';
 
 function sign(params: Record<string, string>): string {
